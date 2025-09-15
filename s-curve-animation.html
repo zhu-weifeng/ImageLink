@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>S形动画曲线</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        h1 {
+            color: white;
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .animation-area {
+            width: 600px;
+            height: 400px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 15px;
+            position: relative;
+            overflow: hidden;
+            margin-bottom: 30px;
+            box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        /* S形路径 */
+        .s-path {
+            position: absolute;
+            top: 50px;
+            left: 50px;
+            width: 500px;
+            height: 300px;
+            stroke: #3498db;
+            stroke-width: 3;
+            fill: none;
+            opacity: 0.3;
+        }
+
+        /* 运动的小球 */
+        .moving-ball {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: linear-gradient(45deg, #e74c3c, #f39c12);
+            border-radius: 50%;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            animation: moveAlongSCurve 4s ease-in-out infinite;
+            z-index: 10;
+        }
+
+        /* S形动画路径 */
+        @keyframes moveAlongSCurve {
+            0% {
+                left: 50px;
+                top: 80px;
+                transform: scale(1);
+            }
+            25% {
+                left: 200px;
+                top: 120px;
+                transform: scale(1.2);
+            }
+            50% {
+                left: 350px;
+                top: 200px;
+                transform: scale(1);
+            }
+            75% {
+                left: 450px;
+                top: 280px;
+                transform: scale(1.2);
+            }
+            100% {
+                left: 550px;
+                top: 320px;
+                transform: scale(1);
+            }
+        }
+
+        /* 轨迹点 */
+        .trail-dot {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background: rgba(231, 76, 60, 0.6);
+            border-radius: 50%;
+            animation: fadeOut 2s ease-out forwards;
+        }
+
+        @keyframes fadeOut {
+            0% {
+                opacity: 1;
+                transform: scale(1);
+            }
+            100% {
+                opacity: 0;
+                transform: scale(0.5);
+            }
+        }
+
+        /* 控制按钮 */
+        .controls {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 25px;
+            background: linear-gradient(45deg, #3498db, #2980b9);
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(52, 152, 219, 0.3);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(52, 152, 219, 0.4);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .btn.pause {
+            background: linear-gradient(45deg, #e74c3c, #c0392b);
+            box-shadow: 0 4px 15px rgba(231, 76, 60, 0.3);
+        }
+
+        .btn.pause:hover {
+            box-shadow: 0 6px 20px rgba(231, 76, 60, 0.4);
+        }
+
+        /* 暂停状态 */
+        .paused .moving-ball {
+            animation-play-state: paused;
+        }
+
+        /* 速度指示器 */
+        .speed-indicator {
+            color: white;
+            text-align: center;
+            margin-top: 20px;
+            font-size: 18px;
+        }
+
+        .speed-control {
+            margin-top: 15px;
+            text-align: center;
+        }
+
+        .speed-slider {
+            width: 200px;
+            margin: 0 10px;
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .animation-area {
+                width: 90vw;
+                height: 300px;
+            }
+            
+            .s-path {
+                width: calc(90vw - 100px);
+                height: 200px;
+            }
+            
+            @keyframes moveAlongSCurve {
+                0% {
+                    left: 5%;
+                    top: 60px;
+                }
+                25% {
+                    left: 25%;
+                    top: 100px;
+                }
+                50% {
+                    left: 50%;
+                    top: 150px;
+                }
+                75% {
+                    left: 75%;
+                    top: 200px;
+                }
+                100% {
+                    left: 90%;
+                    top: 240px;
+                }
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>S形动画曲线</h1>
+        
+        <div class="animation-area" id="animationArea">
+            <!-- SVG S形路径 -->
+            <svg class="s-path">
+                <path d="M 0 30 Q 125 -20 250 100 T 500 270" stroke="#3498db" stroke-width="3" fill="none"/>
+            </svg>
+            
+            <!-- 运动的小球 -->
+            <div class="moving-ball" id="movingBall"></div>
+        </div>
+        
+        <div class="controls">
+            <button class="btn" id="startBtn" onclick="startAnimation()">开始</button>
+            <button class="btn pause" id="pauseBtn" onclick="pauseAnimation()">暂停</button>
+            <button class="btn" id="resetBtn" onclick="resetAnimation()">重置</button>
+        </div>
+        
+        <div class="speed-control">
+            <label for="speedSlider" style="color: white; margin-right: 10px;">速度:</label>
+            <input type="range" id="speedSlider" class="speed-slider" min="0.5" max="3" step="0.1" value="1" onchange="changeSpeed(this.value)">
+            <span id="speedValue" style="color: white; margin-left: 10px;">1.0x</span>
+        </div>
+        
+        <div class="speed-indicator">
+            <p>观察小球沿着S形曲线的平滑运动轨迹</p>
+        </div>
+    </div>
+
+    <script>
+        let animationArea = document.getElementById('animationArea');
+        let movingBall = document.getElementById('movingBall');
+        let isPaused = false;
+        let currentSpeed = 1;
+        let trailInterval;
+
+        // 开始动画
+        function startAnimation() {
+            isPaused = false;
+            animationArea.classList.remove('paused');
+            startTrail();
+        }
+
+        // 暂停动画
+        function pauseAnimation() {
+            isPaused = !isPaused;
+            if (isPaused) {
+                animationArea.classList.add('paused');
+                clearInterval(trailInterval);
+                document.getElementById('pauseBtn').textContent = '继续';
+            } else {
+                animationArea.classList.remove('paused');
+                startTrail();
+                document.getElementById('pauseBtn').textContent = '暂停';
+            }
+        }
+
+        // 重置动画
+        function resetAnimation() {
+            isPaused = false;
+            animationArea.classList.remove('paused');
+            document.getElementById('pauseBtn').textContent = '暂停';
+            
+            // 清除轨迹点
+            const trailDots = document.querySelectorAll('.trail-dot');
+            trailDots.forEach(dot => dot.remove());
+            
+            // 重新开始动画
+            movingBall.style.animation = 'none';
+            setTimeout(() => {
+                movingBall.style.animation = `moveAlongSCurve ${4/currentSpeed}s ease-in-out infinite`;
+                startTrail();
+            }, 10);
+        }
+
+        // 改变速度
+        function changeSpeed(speed) {
+            currentSpeed = parseFloat(speed);
+            document.getElementById('speedValue').textContent = speed + 'x';
+            
+            // 更新动画速度
+            movingBall.style.animationDuration = `${4/currentSpeed}s`;
+            
+            // 重新启动轨迹
+            if (!isPaused) {
+                clearInterval(trailInterval);
+                startTrail();
+            }
+        }
+
+        // 创建轨迹效果
+        function createTrailDot() {
+            if (isPaused) return;
+            
+            const rect = movingBall.getBoundingClientRect();
+            const areaRect = animationArea.getBoundingClientRect();
+            
+            const dot = document.createElement('div');
+            dot.className = 'trail-dot';
+            dot.style.left = (rect.left - areaRect.left + 6) + 'px';
+            dot.style.top = (rect.top - areaRect.top + 6) + 'px';
+            
+            animationArea.appendChild(dot);
+            
+            // 2秒后移除轨迹点
+            setTimeout(() => {
+                if (dot.parentNode) {
+                    dot.parentNode.removeChild(dot);
+                }
+            }, 2000);
+        }
+
+        // 开始轨迹效果
+        function startTrail() {
+            clearInterval(trailInterval);
+            trailInterval = setInterval(createTrailDot, 100 / currentSpeed);
+        }
+
+        // 页面加载完成后自动开始动画
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                startAnimation();
+            }, 500);
+        });
+
+        // 添加鼠标悬停效果
+        movingBall.addEventListener('mouseenter', () => {
+            if (!isPaused) {
+                movingBall.style.filter = 'brightness(1.5) drop-shadow(0 0 10px rgba(231, 76, 60, 0.8))';
+            }
+        });
+
+        movingBall.addEventListener('mouseleave', () => {
+            movingBall.style.filter = 'none';
+        });
+
+        // 键盘控制
+        document.addEventListener('keydown', (e) => {
+            switch(e.key) {
+                case ' ': // 空格键暂停/继续
+                    e.preventDefault();
+                    pauseAnimation();
+                    break;
+                case 'r': // R键重置
+                case 'R':
+                    resetAnimation();
+                    break;
+                case 'ArrowUp': // 上箭头加速
+                    e.preventDefault();
+                    const newSpeedUp = Math.min(3, currentSpeed + 0.1);
+                    document.getElementById('speedSlider').value = newSpeedUp;
+                    changeSpeed(newSpeedUp);
+                    break;
+                case 'ArrowDown': // 下箭头减速
+                    e.preventDefault();
+                    const newSpeedDown = Math.max(0.5, currentSpeed - 0.1);
+                    document.getElementById('speedSlider').value = newSpeedDown;
+                    changeSpeed(newSpeedDown);
+                    break;
+            }
+        });
+    </script>
+</body>
+</html>
